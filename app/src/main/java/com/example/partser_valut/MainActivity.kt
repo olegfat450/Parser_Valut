@@ -57,6 +57,12 @@ class MainActivity : ComponentActivity() {
            var listBank: MutableState<List<Bank>> = mutableStateOf(emptyList())
           var indicatorSize = mutableStateOf(84.dp)
 
+    var stringCb = ""
+    var usdCb = ""
+    var eurCb = ""
+    var cnyCb = ""
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +79,21 @@ class MainActivity : ComponentActivity() {
     @Composable
 fun  Strart() {
 
-        Row (modifier = Modifier.fillMaxWidth().height(80.dp).background(color = Color.LightGray),
+         Column (modifier = Modifier.fillMaxWidth().background(color = Color(getColor(R.color.blue))).pointerInput (Unit){
+             detectTapGestures ( onLongPress = { getList() }) }) {
+
+             Text(text = stringCb, textAlign = TextAlign.Center, fontSize = 24.sp, fontWeight = FontWeight.Bold,
+                 fontStyle = FontStyle.Italic, modifier = Modifier.fillMaxWidth().padding(16.dp)
+
+             )
+
+             Row (modifier = Modifier.fillMaxWidth().padding(bottom = 14.dp), horizontalArrangement = Arrangement.SpaceAround) {
+                 Text(text = usdCb, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                 Text(text = eurCb, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                 Text(text = cnyCb, fontSize = 18.sp, fontWeight = FontWeight.Bold) } }
+
+
+        Row (modifier = Modifier.padding(top = 96.dp).fillMaxWidth().height(60.dp).background(color = Color.Black),
             horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically)
 
         { Head() }
@@ -81,7 +101,7 @@ fun  Strart() {
 
 
 
-           Box( modifier = Modifier.fillMaxSize().padding(top = 84.dp), contentAlignment = Alignment.Center) {
+           Box( modifier = Modifier.fillMaxSize().padding(top = 156.dp).background(color = Color(getColor(R.color.blue))), contentAlignment = Alignment.Center) {
 
                CircularProgressIndicator(modifier = Modifier.size(indicatorSize.value))
 
@@ -90,9 +110,8 @@ fun  Strart() {
 
             items(listBank.value) {
 
-                Column  (modifier = Modifier.fillMaxWidth().padding(8.dp).background(color = Color.LightGray).pointerInput (Unit){
-                    detectTapGestures ( onLongPress = { getList() })
-                }) {
+                Column  (modifier = Modifier.fillMaxWidth().padding(4.dp).background(color = Color.LightGray)
+                ) {
 
             Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
 
@@ -244,6 +263,7 @@ fun  Strart() {
         try {
            val doc = Jsoup.connect("https://kovalut.ru/kurs/krasnojarsk").get()
             val table: Elements = doc.getElementsByClass("trow")
+            val tableCb: Elements = doc.getElementsByClass("col-span-1 grid grid-cols-1 gap-2")
             table.forEach { list += (it.children().text()) }
            list.forEach { arrayV += it.split(" ") }
 
@@ -262,7 +282,7 @@ fun  Strart() {
 
 
                 var name =""
-                s.forEach { name += "${it} "  }
+                s.forEach { name += " ${it} "  }
                 var image: Int = R.drawable.ic_launcher_background
 
                 base.forEach { if(name.uppercase().contains(it.bank.uppercase())) image = it.image  }
@@ -274,11 +294,16 @@ fun  Strart() {
                 }}
 
                 listBank.value += Bank(name,price[0],price[1],price[2],price[3],price[4],price[5],image,upDate)
+
             }
 
+             stringCb = tableCb.get(0).child(0).text() + " " +tableCb.get(0).child(1).text()
+             usdCb = tableCb.get(0).child(3).text()
+             eurCb = tableCb.get(0).child(5).text()
+             cnyCb = tableCb.get(0).child(7).text()
                  indicatorSize.value = 0.dp
 
-
+                      Log.d("Mylog",usdCb + " " + eurCb + " " + cnyCb )
             //  listValut.value = arrayV
         } catch (_: Exception) {
             Log.d("MyLog", "ERROR") }
