@@ -1,6 +1,5 @@
-package com.example.partser_valut.ui.theme
+package com.example.partser_valut.ui.teams
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
