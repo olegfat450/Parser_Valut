@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getColor
@@ -24,9 +25,9 @@ import com.example.partser_valut.domain.Cb
 
 
 @Composable
-fun DrawHeader( listCb: Cb?,context: Context) {
+fun DrawHeader( listCb: Cb?,context: Context,top: Dp) {
 
-    Column (modifier = Modifier.fillMaxWidth().background(color = Color(getColor(context,R.color.blue)))
+    Column (modifier = Modifier.fillMaxWidth().padding(top = top)
     ) {
 
         Text(text = listCb?.stringCb?: "", textAlign = TextAlign.Center, fontSize = 24.sp, fontWeight = FontWeight.Bold,

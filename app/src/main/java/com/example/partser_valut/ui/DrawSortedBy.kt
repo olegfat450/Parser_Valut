@@ -15,16 +15,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.partser_valut.R
 
 @Composable
-fun DrawSortedBy(onClick: (Pair<String,String>) -> Unit) {
+fun DrawSortedBy(top: Dp, onClick: (Pair<String,String>) -> Unit) {
 
 
 
 
-    Row (modifier = Modifier.padding(top = 96.dp).fillMaxWidth().height(60.dp).background(color = Color.Black),
+    Row (modifier = Modifier.padding(top = 96.dp + top).fillMaxWidth().height(60.dp).background(color = Color.Black),
         horizontalArrangement = Arrangement.Absolute.SpaceAround, verticalAlignment = Alignment.CenterVertically)
 
     {  DrawItemBlock("usd") { onClick(Pair(it.first,"usd${it.second}"))}

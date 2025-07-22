@@ -3,11 +3,14 @@ package com.example.partser_valut.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -32,6 +35,9 @@ import kotlinx.coroutines.launch
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.sp
 import com.example.partser_valut.domain.BankCb
 
 class MainActivity : ComponentActivity() {
@@ -48,16 +54,20 @@ class MainActivity : ComponentActivity() {
          //   var indicatorSize = 0.dp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+    //  enableEdgeToEdge()
         getBanks()
 
         setContent {
+        val d = LocalDensity.current
 
-              DrawHeader(context = this@MainActivity, listCb = listCb)
+            val statusBarHeight = WindowInsets.statusBars.getTop(d).dp
+
+           // Modifier.fillMaxSize().background(color = Color.Blue)
+              DrawHeader(context = this@MainActivity, listCb = listCb, top = statusBarHeight)
 
 
-            DrawSortedBy() { sorted(it) }
-             Start() { getBanks() } }
+            DrawSortedBy(statusBarHeight) { sorted(it) }
+             Start(statusBarHeight) { getBanks() } }
 
     }
 
@@ -65,7 +75,7 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-fun  Start(onRefresh: () -> Unit) {
+fun  Start(top: Dp, onRefresh: () -> Unit) {
 
    //  listBank = remember { mutableStateOf<List<Bank?>?>(null) }
 
@@ -75,9 +85,8 @@ fun  Start(onRefresh: () -> Unit) {
 
         PullToRefreshBox(onRefresh = {onRefresh()}, isRefreshing = false) {
 
-           Box( modifier = Modifier.fillMaxSize().padding(top = 156.dp).background(color = Color(getColor(
-               R.color.blue
-           ))), contentAlignment = Alignment.Center) {
+           Box( modifier = Modifier.fillMaxSize().padding(top = 156.dp + top),
+               contentAlignment = Alignment.Center) {
 
           CircularProgressIndicator(modifier = Modifier.size(indicatorSize))
 
